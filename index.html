@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Repossession Shield — Verify. Dispute. Refer.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F1B2E;
+    --panel:#16233A;
+    --parchment:#F3EFE4;
+    --parchment-line:#DDD4BE;
+    --brass:#C9A24B;
+    --brass-light:#E4C878;
+    --warm:#F5F1E6;
+    --muted:#8FA0BE;
+    --muted-dark:#5C6A82;
+    --serif: 'Fraunces', serif;
+    --sans: 'Inter', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--ink);
+    color:var(--warm);
+    font-family:var(--sans);
+    line-height:1.6;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(15,27,46,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(201,162,75,0.18);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:600;font-size:1.15rem;letter-spacing:0.2px;}
+  .brand svg{width:26px;height:26px;flex-shrink:0;}
+  nav ul{list-style:none;display:flex;gap:28px;margin:0;padding:0;font-size:0.92rem;color:var(--muted);}
+  nav ul a{text-decoration:none;transition:color .2s;}
+  nav ul a:hover{color:var(--brass-light);}
+  .nav-cta{display:none;}
+  @media(min-width:760px){.nav-cta{display:inline-block;}}
+  .btn{
+    display:inline-block;
+    font-family:var(--sans);font-weight:600;font-size:0.9rem;
+    padding:11px 22px;border-radius:2px;
+    text-decoration:none;cursor:pointer;border:1px solid transparent;
+    transition:transform .15s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-brass{background:linear-gradient(100deg,var(--brass),var(--brass-light));color:var(--ink);}
+  .btn-outline{border-color:rgba(245,241,230,0.35);color:var(--warm);}
+  .btn-outline:hover{border-color:var(--brass-light);}
+
+  /* ---------- HERO (photo-forward) ---------- */
+  header.hero{
+    position:relative;
+    min-height:88vh;
+    display:flex;align-items:flex-end;
+    overflow:hidden;
+    padding:100px 0 0;
+  }
+  .hero-photo{
+    position:absolute;inset:0;z-index:0;
+  }
+  .hero-photo img{
+    width:100%;height:100%;object-fit:cover;object-position:center 30%;
+    filter:grayscale(0.25) contrast(1.05) brightness(0.55);
+  }
+  .hero-photo::after{
+    content:"";position:absolute;inset:0;
+    background:
+      linear-gradient(180deg, rgba(15,27,46,0.55) 0%, rgba(15,27,46,0.35) 40%, rgba(15,27,46,0.96) 92%),
+      linear-gradient(90deg, rgba(15,27,46,0.92) 0%, rgba(15,27,46,0.35) 55%, rgba(15,27,46,0.15) 100%);
+  }
+  header.hero .wrap{position:relative;z-index:1;padding-bottom:76px;}
+  .eyebrow{
+    font-family:var(--mono);font-size:0.78rem;letter-spacing:2.5px;
+    color:var(--brass-light);text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;margin-bottom:26px;
+  }
+  .eyebrow::before{content:"§ 129–132";}
+  .eyebrow .dash{width:32px;height:1px;background:var(--muted-dark);}
+  h1.headline{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(2.4rem,6vw,4.3rem);
+    line-height:1.04;letter-spacing:-0.5px;
+    max-width:12ch;
+    margin:0 0 28px;
+    color:var(--warm);
+    text-shadow:0 2px 24px rgba(0,0,0,0.35);
+  }
+  h1.headline em{font-style:normal;color:var(--brass-light);}
+  .hero-sub{
+    max-width:480px;color:var(--warm);opacity:0.88;font-size:1.08rem;margin-bottom:40px;
+  }
+  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:64px;}
+  .photo-credit{
+    position:absolute;bottom:14px;right:28px;z-index:2;
+    font-family:var(--mono);font-size:0.68rem;color:rgba(245,241,230,0.45);
+  }
+
+  .verdict-strip{
+    display:flex;flex-wrap:wrap;gap:0;
+    border-top:1px solid rgba(201,162,75,0.3);
+    border-bottom:1px solid rgba(201,162,75,0.3);
+    max-width:640px;
+  }
+  .verdict-strip div{
+    flex:1 1 33%;padding:18px 4px 14px;border-right:1px solid rgba(201,162,75,0.18);
+  }
+  .verdict-strip div:last-child{border-right:none;}
+  .verdict-strip .num{font-family:var(--serif);font-size:1.9rem;color:var(--brass-light);display:block;}
+  .verdict-strip .lbl{font-family:var(--mono);font-size:0.7rem;letter-spacing:1.2px;color:var(--muted);text-transform:uppercase;}
+
+  /* ---------- PHOTO BANNER (partners) ---------- */
+  .photo-banner{
+    position:relative;min-height:420px;display:flex;align-items:center;
+    overflow:hidden;
+  }
+  .photo-banner img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    filter:grayscale(0.4) contrast(1.05) brightness(0.5) sepia(0.15);
+  }
+  .photo-banner::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(100deg, rgba(15,27,46,0.95) 0%, rgba(15,27,46,0.75) 45%, rgba(201,162,75,0.25) 100%);
+  }
+  .photo-banner .wrap{position:relative;z-index:1;}
+  .photo-banner h3{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.2rem);max-width:14ch;color:var(--warm);margin:0 0 18px;}
+  .photo-banner p{max-width:44ch;color:var(--muted);margin-bottom:26px;}
+
+  /* ---------- ASSET CATEGORIES ---------- */
+  .assets{background:var(--ink);padding:70px 0;}
+  .asset-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:36px;}
+  @media(min-width:640px){.asset-grid{grid-template-columns:repeat(5,1fr);}}
+  .asset-card{
+    background:var(--panel);border:1px solid rgba(201,162,75,0.18);
+    padding:26px 14px;text-align:center;border-radius:3px;
+  }
+  .asset-card svg{width:36px;height:36px;margin:0 auto 12px;display:block;}
+  .asset-card span{font-family:var(--sans);font-weight:600;font-size:0.88rem;color:var(--warm);}
+  .asset-more{border-style:dashed;}
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{padding:96px 0;}
+  .section-tag{
+    font-family:var(--mono);font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;
+    color:var(--brass);margin-bottom:14px;display:block;
+  }
+  h2.section-title{
+    font-family:var(--serif);font-weight:600;font-size:clamp(1.7rem,3.4vw,2.5rem);
+    margin:0 0 20px;max-width:16ch;color:var(--warm);
+  }
+  .section-lede{color:var(--muted);max-width:560px;font-size:1.02rem;}
+
+  /* ---------- PROBLEM (parchment inverse panel) ---------- */
+  .problem{background:var(--parchment);color:#2B2214;}
+  .problem .section-tag{color:#8A6A24;}
+  .problem h2.section-title{color:#20180C;}
+  .problem .section-lede{color:#5B4F3A;}
+  .clause-row{display:grid;gap:28px;margin-top:44px;grid-template-columns:1fr;}
+  @media(min-width:700px){.clause-row{grid-template-columns:repeat(3,1fr);}}
+  .clause{border-left:2px solid #C9A24B;padding-left:20px;}
+  .clause .clause-num{font-family:var(--mono);font-size:0.75rem;color:#8A6A24;}
+  .clause p{margin:6px 0 0;color:#40331B;}
+
+  /* ---------- HOW IT WORKS — the signature verification strip ---------- */
+  .works{background:var(--ink);}
+  .verify-console{
+    margin-top:56px;
+    background:var(--panel);
+    border:1px solid rgba(201,162,75,0.2);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .check-row{
+    display:flex;align-items:flex-start;gap:18px;
+    padding:22px 26px;border-bottom:1px solid rgba(201,162,75,0.10);
+    opacity:0.35; transform:translateY(6px);
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  .check-row:last-child{border-bottom:none;}
+  .check-row.in{opacity:1;transform:translateY(0);}
+  .check-mark{
+    flex-shrink:0;width:26px;height:26px;border-radius:50%;
+    border:1.5px solid var(--muted-dark);
+    display:flex;align-items:center;justify-content:center;
+    transition:border-color .4s ease, background .4s ease;
+    margin-top:2px;
+  }
+  .check-row.in .check-mark{border-color:var(--brass-light);background:rgba(201,162,75,0.12);}
+  .check-mark svg{width:13px;height:13px;opacity:0;transition:opacity .4s ease .1s;}
+  .check-row.in .check-mark svg{opacity:1;}
+  .check-body .stage{font-family:var(--mono);font-size:0.68rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--brass);margin-bottom:4px;}
+  .check-body h4{margin:0 0 4px;font-family:var(--sans);font-weight:600;font-size:1rem;color:var(--warm);}
+  .check-body p{margin:0;color:var(--muted);font-size:0.92rem;max-width:56ch;}
+  /* ---------- AUDIENCE SPLIT ---------- */
+  .split{display:grid;gap:1px;background:rgba(201,162,75,0.18);margin-top:50px;border:1px solid rgba(201,162,75,0.18);}
+  @media(min-width:760px){.split{grid-template-columns:1fr 1fr;}}
+  .split-panel{background:var(--ink);padding:40px 34px;}
+  .split-panel .tag{font-family:var(--mono);font-size:0.7rem;letter-spacing:1.5px;color:var(--brass);text-transform:uppercase;}
+  .split-panel h3{font-family:var(--serif);font-size:1.5rem;margin:10px 0 14px;color:var(--warm);}
+  .split-panel ul{margin:0 0 22px;padding-left:18px;color:var(--muted);font-size:0.94rem;}
+  .split-panel li{margin-bottom:8px;}
+
+  /* ---------- FAQ ---------- */
+  .faq{background:var(--panel);}
+  .faq-item{border-bottom:1px solid rgba(201,162,75,0.16);}
+  .faq-item summary{
+    list-style:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 4px;font-family:var(--sans);font-weight:600;font-size:1.02rem;color:var(--warm);
+  }
+  .faq-item summary::-webkit-details-marker{display:none;}
+  .faq-item summary::after{
+    content:"+";font-family:var(--mono);color:var(--brass-light);font-size:1.3rem;flex-shrink:0;margin-left:20px;
+    transition:transform .2s ease;
+  }
+  .faq-item[open] summary::after{transform:rotate(45deg);}
+  .faq-item p{margin:0 0 22px;color:var(--muted);max-width:64ch;font-size:0.96rem;}
+
+  /* ---------- FOOTER / CONTACT ---------- */
+  footer{background:var(--ink);border-top:1px solid rgba(201,162,75,0.18);padding:70px 0 34px;}
+  .foot-grid{display:grid;gap:40px;grid-template-columns:1fr;margin-bottom:50px;}
+  @media(min-width:760px){.foot-grid{grid-template-columns:1.3fr 1fr 1fr;}}
+  .foot-brand{font-family:var(--serif);font-size:1.2rem;color:var(--warm);margin-bottom:12px;}
+  .foot-col h5{font-family:var(--mono);font-size:0.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--brass);margin:0 0 14px;}
+  .foot-col a{display:block;color:var(--muted);text-decoration:none;font-size:0.92rem;margin-bottom:10px;}
+  .foot-col a:hover{color:var(--brass-light);}
+  .foot-bottom{
+    border-top:1px solid rgba(245,241,230,0.08);padding-top:26px;
+    display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;
+    font-family:var(--mono);font-size:0.75rem;color:var(--muted-dark);
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .check-row{transition:none;opacity:1;transform:none;}
+    .btn:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">
+      <svg viewBox="0 0 100 116" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 2 L94 18 V52 C94 84 76 104 50 114 C24 104 6 84 6 52 V18 Z" stroke="#C9A24B" stroke-width="5"/>
+        <path d="M30 58 L45 75 L72 40" stroke="#E4C878" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Repossession Shield
+    </div>
+    <ul>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#partners">Partners</a></li>
+      <li><a href="#faq">FAQ</a></li>
+    </ul>
+    <a class="btn btn-brass nav-cta" href="#contact">Check my case</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-photo">
+    <img src="https://images.unsplash.com/photo-1763729805496-b5dbf7f00c79?auto=format&fit=crop&w=1600&q=80" alt="Person signing a vehicle finance agreement">
+  </div>
+  <span class="photo-credit">Photo — Unsplash</span>
+  <div class="wrap">
+    <div class="eyebrow"><span class="dash"></span>National Credit Act, Chapter 6</div>
+    <h1 class="headline">A repossession isn't automatically <em>lawful</em>.</h1>
+    <p class="hero-sub">Repossession Shield checks whether your repossession followed the law — then helps you dispute it if it didn't.</p>
+    <div class="hero-actions">
+      <a class="btn btn-brass" href="#contact">Check my case</a>
+      <a class="btn btn-outline" href="#partners">I'm a partner</a>
+    </div>
+  </div>
+</header>
+
+<section class="assets">
+  <div class="wrap">
+    <span class="section-tag">What we cover</span>
+    <h2 class="section-title">Any repossessable asset.</h2>
+    <div class="asset-grid">
+      <div class="asset-card">
+        <svg viewBox="0 0 48 48" fill="none"><path d="M8 22 L24 8 L40 22 V40 H8 Z" stroke="#C9A24B" stroke-width="2.4" stroke-linejoin="round"/><path d="M19 40V28h10v12" stroke="#C9A24B" stroke-width="2.4"/></svg>
+        <span>Homes</span>
+      </div>
+      <div class="asset-card">
+        <svg viewBox="0 0 48 48" fill="none"><path d="M6 28 L10 16 H38 L42 28" stroke="#C9A24B" stroke-width="2.4" stroke-linejoin="round"/><rect x="4" y="28" width="40" height="10" rx="2" stroke="#C9A24B" stroke-width="2.4"/><circle cx="14" cy="38" r="3" stroke="#C9A24B" stroke-width="2.2"/><circle cx="34" cy="38" r="3" stroke="#C9A24B" stroke-width="2.2"/></svg>
+        <span>Vehicles</span>
+      </div>
+      <div class="asset-card">
+        <svg viewBox="0 0 48 48" fill="none"><rect x="8" y="8" width="32" height="24" rx="1.5" stroke="#C9A24B" stroke-width="2.4"/><path d="M18 40h12M24 32v8" stroke="#C9A24B" stroke-width="2.4"/></svg>
+        <span>Electronics</span>
+      </div>
+      <div class="asset-card">
+        <svg viewBox="0 0 48 48" fill="none"><path d="M8 24V16a3 3 0 0 1 3-3h26a3 3 0 0 1 3 3v8" stroke="#C9A24B" stroke-width="2.4"/><rect x="6" y="24" width="36" height="10" rx="2" stroke="#C9A24B" stroke-width="2.4"/><path d="M8 34v5M40 34v5" stroke="#C9A24B" stroke-width="2.4"/></svg>
+        <span>Furniture</span>
+      </div>
+      <div class="asset-card asset-more">
+        <svg viewBox="0 0 48 48" fill="none"><circle cx="12" cy="24" r="2.6" fill="#C9A24B"/><circle cx="24" cy="24" r="2.6" fill="#C9A24B"/><circle cx="36" cy="24" r="2.6" fill="#C9A24B"/></svg>
+        <span>Anything financed</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="problem">
+  <div class="wrap">
+    <span class="section-tag">The gap</span>
+    <h2 class="section-title">The law is specific. The practice often isn't.</h2>
+    <p class="section-lede">Before any asset is repossessed, the National Credit Act sets out exactly what has to happen first. In practice, these steps are the ones most often skipped.</p>
+    <div class="clause-row">
+      <div class="clause">
+        <span class="clause-num">§129</span>
+        <p>A written default notice must be sent before any legal action begins — not a phone call, not a verbal warning.</p>
+      </div>
+      <div class="clause">
+        <span class="clause-num">§130</span>
+        <p>You must be given a real window to cure the default or apply for debt review before enforcement proceeds.</p>
+      </div>
+      <div class="clause">
+        <span class="clause-num">§131</span>
+        <p>Repossession requires a valid court order — agents arriving without one is not a lawful "self-help" repossession.</p>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<section class="works" id="how">
+  <div class="wrap">
+    <span class="section-tag">How it works</span>
+    <h2 class="section-title">Three simple stages.</h2>
+
+    <div class="verify-console">
+      <div class="check-row" data-check>
+        <div class="check-mark"><svg viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#E4C878" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-body">
+          <span class="stage">01 — Verify</span>
+          <h4>We check what happened</h4>
+          <p>Was a notice sent, was a court order shown — we check your case against what the law requires.</p>
+        </div>
+      </div>
+
+      <div class="check-row" data-check>
+        <div class="check-mark"><svg viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#E4C878" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-body">
+          <span class="stage">02 — Dispute</span>
+          <h4>We file the complaint</h4>
+          <p>Where something wasn't followed correctly, we raise it with the credit provider — and escalate if needed.</p>
+        </div>
+      </div>
+
+      <div class="check-row" data-check>
+        <div class="check-mark"><svg viewBox="0 0 16 16" fill="none"><path d="M2 8l4 4 8-8" stroke="#E4C878" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="check-body">
+          <span class="stage">03 — Refer</span>
+          <h4>We bring in a lawyer if needed</h4>
+          <p>If a case needs to go further, we hand it to a partnered attorney — with everything already in order.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="photo-banner">
+  <img src="https://images.unsplash.com/photo-1745847768380-2caeadbb3b71?auto=format&fit=crop&w=1600&q=80" alt="Two people shaking hands in agreement">
+  <div class="wrap">
+    <h3>Let's talk about your case.</h3>
+    <p>Message us on WhatsApp or email — we'll tell you where you stand.</p>
+    <a class="btn btn-brass" href="https://wa.me/27837933579" target="_blank" rel="noopener">Message on WhatsApp</a>
+  </div>
+</div>
+
+<section id="partners">
+  <div class="wrap">
+    <span class="section-tag">Who this is for</span>
+    <h2 class="section-title">Built for the people already in the room.</h2>
+    <p class="section-lede">Consumers rarely find us first — we work through the people they already turn to.</p>
+    <div class="split">
+      <div class="split-panel">
+        <span class="tag">Consumers</span>
+        <h3>Had something repossessed?</h3>
+        <ul>
+          <li>Free verification against the NCA checklist</li>
+          <li>No paperwork? We can request it from the credit provider directly</li>
+          <li>Clear answer on whether your case was handled lawfully</li>
+        </ul>
+        <a class="btn btn-outline" href="#contact">Start a case</a>
+      </div>
+      <div class="split-panel">
+        <span class="tag">Debt counsellors &amp; attorneys</span>
+        <h3>Refer a client, at no cost</h3>
+        <ul>
+          <li>We handle verification and the initial dispute</li>
+          <li>Litigation cases arrive at your desk pre-screened</li>
+          <li>No fee to refer — ever</li>
+        </ul>
+        <a class="btn btn-outline" href="#contact">Partner with us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="wrap">
+    <span class="section-tag">Questions</span>
+    <h2 class="section-title">What people usually ask first.</h2>
+    <div style="margin-top:40px;">
+      <details class="faq-item" open>
+        <summary>What if I don't have any paperwork?</summary>
+        <p>That's common. Part of the dispute process includes formally requesting the credit provider prove they followed the correct steps.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is this only for vehicles?</summary>
+        <p>No. We handle any financed asset that's been repossessed — vehicles, furniture, appliances, and more.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do you represent me in court?</summary>
+        <p>We handle verification and the initial dispute. If your case needs to go to court, we refer it to a partnered attorney.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-brand">Repossession Shield</div>
+        <p style="color:var(--muted);max-width:32ch;font-size:0.94rem;">Verify. Dispute. Refer. Protecting consumers from unlawful asset repossession under the National Credit Act.</p>
+      </div>
+      <div class="foot-col">
+        <h5>Get in touch</h5>
+        <a href="mailto:info@repossessionshield.co.za">info@repossessionshield.co.za</a>
+        <a href="https://wa.me/27837933579" target="_blank" rel="noopener">WhatsApp: 083 793 3579</a>
+        <a href="#">Mpumalanga, South Africa</a>
+      </div>
+      <div class="foot-col">
+        <h5>Company</h5>
+        <a href="#how">How it works</a>
+        <a href="#partners">Partners</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>Enterprise No. K2026684006</span>
+      <span>© 2026 Repossession Shield (Pty) Ltd</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const rows = document.querySelectorAll('[data-check]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    rows.forEach(r => r.classList.add('in'));
+  } else {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          const idx = Array.from(rows).indexOf(entry.target);
+          setTimeout(() => entry.target.classList.add('in'), idx * 90);
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+    rows.forEach(r => io.observe(r));
+  }
+</script>
+
+</body>
+</html>
